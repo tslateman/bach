@@ -1,0 +1,11 @@
+{
+  "name": "bach",
+  "description": "Two-tier agent orchestration: Manager decomposes and delegates, Workers execute focused subtasks",
+  "version": "0.1.0",
+  "author": {
+    "name": "Your Name"
+  },
+  "homepage": "https://github.com/yourusername/bach",
+  "license": "MIT",
+  "keywords": ["orchestration", "agents", "delegation", "workers", "planning", "execution"]
+}
