@@ -5,7 +5,7 @@
   "author": {
     "name": "Your Name"
   },
-  "homepage": "https://github.com/yourusername/bach",
+  "homepage": "https://github.com/tslateman/bach",
   "license": "MIT",
   "keywords": ["orchestration", "agents", "delegation", "workers", "planning", "execution"]
 }

@@ -52,12 +52,12 @@ bach/
 
 ```bash
 # Clone to your plugins directory
-git clone https://github.com/yourusername/bach ~/.claude/plugins/bach
+git clone https://github.com/tslateman/bach ~/.claude/plugins/bach
 ```
 
 Or add to an existing project:
 ```bash
-git clone https://github.com/yourusername/bach .claude-plugins/bach
+git clone https://github.com/tslateman/bach .claude-plugins/bach
 ```
 
 ## Usage
