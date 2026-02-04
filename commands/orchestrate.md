@@ -1,18 +1,10 @@
 ---
-name: orchestrate
-description: Decompose a complex task and delegate to specialist workers
-invocation: user
+description: "Decompose a complex task and delegate to specialist workers (researcher, coder, reviewer)"
 ---
 
-# /orchestrate
-
-Break down the user's request using the two-tier agent pattern.
-
-## Instructions
+Invoke the bach:orchestrating-work skill and follow it exactly.
 
 You are the **Manager** (Lead Orchestrator). Your job is to decompose, delegate, and synthesize—never to do the work yourself.
-
-Use the skill at `bach:orchestrating-work` to guide your process.
 
 ## Process
 
