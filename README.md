@@ -7,24 +7,24 @@ Two-tier agent orchestration for Claude Code. A Manager decomposes complex tasks
 ```
 User Request
      ↓
-┌─────────────────────────────────────┐
-│           MANAGER                   │
-│  • Analyze objectives               │
-│  • Decompose into subtasks          │
-│  • Delegate to workers              │
-│  • Synthesize results               │
-│  • Never does the work              │
-└─────────────────────────────────────┘
-     ↓                ↓               ↓
-┌─────────┐    ┌─────────┐    ┌─────────┐
-│RESEARCHER│    │  CODER  │    │REVIEWER │
-│ Investigate│    │ Implement│    │ Evaluate │
-│ Recommend │    │ Test     │    │ Approve  │
-└─────────┘    └─────────┘    └─────────┘
-     ↓                ↓               ↓
-     └────────────────┴───────────────┘
-                      ↓
-              Final Result
+┌───────────────────────────────────────────────┐
+│                    MANAGER                    │
+│  • Analyze objectives                         │
+│  • Decompose into subtasks                    │
+│  • Delegate to workers                        │
+│  • Synthesize results                         │
+│  • Never does the work                        │
+└───────────────────────────────────────────────┘
+       ↓                ↓                ↓
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│  RESEARCHER │  │    CODER    │  │   REVIEWER  │
+│ Investigate │  │  Implement  │  │   Evaluate  │
+│  Recommend  │  │    Test     │  │   Approve   │
+└─────────────┘  └─────────────┘  └─────────────┘
+       ↓                ↓                ↓
+       └────────────────┴────────────────┘
+                        ↓
+                 Final Result
 ```
 
 ## Project Structure
