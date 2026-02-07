@@ -63,7 +63,7 @@ git clone https://github.com/tslateman/bach .claude-plugins/bach
 
 ## Quick Start
 
-Try this example to see orchestration in action:
+Here's a hypothetical example showing the orchestration flow:
 
 ```
 /orchestrate Add input validation to the user registration form
