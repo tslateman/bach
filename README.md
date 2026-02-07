@@ -56,9 +56,44 @@ git clone https://github.com/tslateman/bach ~/.claude/plugins/bach
 ```
 
 Or add to an existing project:
+
 ```bash
 git clone https://github.com/tslateman/bach .claude-plugins/bach
 ```
+
+## Quick Start
+
+Try this example to see orchestration in action:
+
+```
+/orchestrate Add input validation to the user registration form
+```
+
+The Manager analyzes this and creates an execution plan:
+
+```
+## Execution Plan
+
+### Objective
+Add robust input validation to user registration
+
+### Subtasks
+1. Research validation patterns (researcher)
+   - Compare client-side vs server-side approaches
+   - Recommend validation library
+
+2. Implement validation (coder)
+   - Add form validation rules
+   - Display error messages
+   - Write unit tests
+
+3. Review implementation (reviewer)
+   - Check for edge cases
+   - Verify security (XSS, injection)
+   - Approve or request changes
+```
+
+Each worker reports back with structured results. The Manager synthesizes findings and reports the final outcome.
 
 ## Usage
 
@@ -71,6 +106,7 @@ Break down a complex task using the two-tier pattern:
 ```
 
 The Manager will:
+
 1. Identify objectives
 2. Create an execution plan with subtasks
 3. Dispatch workers (researcher → coder → reviewer)
@@ -91,12 +127,14 @@ The Manager will:
 ## When to Use
 
 **Good fit:**
+
 - Complex tasks with 3+ distinct parts
 - Tasks needing different skills (research, code, review)
 - Quality benefits from focused attention
 - You want structured delegation
 
 **Not a good fit:**
+
 - Simple tasks (just do them)
 - Highly interdependent work
 - Exploratory investigation (don't know scope yet)
@@ -104,11 +142,11 @@ The Manager will:
 
 ## Core Workers
 
-| Worker | Specialty |
-|--------|-----------|
+| Worker       | Specialty                                                     |
+| ------------ | ------------------------------------------------------------- |
 | `researcher` | Investigate options, analyze trade-offs, recommend approaches |
-| `coder` | Implement features, write tests, fix bugs |
-| `reviewer` | Evaluate quality, find issues, approve/reject |
+| `coder`      | Implement features, write tests, fix bugs                     |
+| `reviewer`   | Evaluate quality, find issues, approve/reject                 |
 
 ## Creating Custom Workers
 
@@ -118,9 +156,9 @@ See `bach:creating-workers` for the full guide. Quick example:
 # Tester Worker Prompt Template
 
 Task tool (general-purpose):
-  description: "Tester: [what to test]"
-  prompt: |
-    You are a Tester specialist...
+description: "Tester: [what to test]"
+prompt: |
+You are a Tester specialist...
 
     ## Your Task
     [PASTE: What to test]
@@ -137,12 +175,14 @@ Save to `bach/skills/orchestrating-work/workers/tester-prompt.md`.
 ## Philosophy
 
 **Manager mindset:**
+
 - Plan, don't execute
 - Delegate, don't implement
 - Verify, don't assume
 - Synthesize, don't just collect
 
 **Worker mindset:**
+
 - Focus on your specialty
 - Report INCAPABLE honestly
 - Return structured results
@@ -151,6 +191,7 @@ Save to `bach/skills/orchestrating-work/workers/tester-prompt.md`.
 ## Integration
 
 Works well with:
+
 - `superpowers:writing-plans` - For larger initiatives
 - `superpowers:test-driven-development` - Workers follow TDD
 - `superpowers:dispatching-parallel-agents` - Independent subtasks
