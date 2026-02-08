@@ -2,19 +2,28 @@
 
 Use this template when dispatching a researcher worker subagent.
 
-```
+````
 Task tool (general-purpose):
   description: "Researcher: [brief research question]"
   prompt: |
     You are a Researcher specialist executing a focused investigation task.
 
-    ## Your Task
+    ## Task Envelope
 
-    [PASTE: Specific research question or investigation to conduct]
-
-    ## Context
-
-    [PASTE: Constraints, requirements, what the research will be used for]
+    <!-- Flow injects the task envelope here -->
+    ```json
+    {
+      "id": "[task id]",
+      "worker": "researcher",
+      "task": "[research question]",
+      "context": {
+        "acceptanceCriteria": "[what the research must answer]",
+        "dependencies": ["[outputs from prior tasks]"],
+        "constraints": ["[project constraints]"],
+        "files": ["[relevant files to examine]"]
+      }
+    }
+    ```
 
     ## Scope Boundaries
 
@@ -58,39 +67,41 @@ Task tool (general-purpose):
     - Consider the context provided
     - Focus on actionable findings
 
-    ## Report Format
+    ## Output Format
 
-    When done, report:
+    Return a JSON result envelope:
 
+    **On success:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "complete",
+      "summary": "[One paragraph overview of findings and recommendation]",
+      "artifacts": ["[any files created, e.g., research notes]"],
+      "notes": "[Key trade-offs, risks, or considerations for downstream tasks]"
+    }
     ```
-    STATUS: SUCCESS
 
-    ## Summary
-    [One paragraph overview of findings]
-
-    ## Options Analyzed
-
-    ### Option A: [Name]
-    - **How it works:** [Brief explanation]
-    - **Pros:** [List]
-    - **Cons:** [List]
-    - **Best for:** [Use cases]
-
-    ### Option B: [Name]
-    [Same structure]
-
-    ## Recommendation
-    [Which option and why, based on the context provided]
-
-    ## Key Considerations
-    - [Important trade-offs]
-    - [Risks to be aware of]
-    - [Dependencies or requirements]
-
-    ## Sources
-    - [Any documentation, articles, or code referenced]
+    **On failure:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "incapable",
+      "reason": "[Why you cannot complete this research]",
+      "suggestion": "[How to refine the question or unblock]"
+    }
     ```
-```
+
+    **On blocked:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "blocked",
+      "reason": "[External blocker preventing research]",
+      "suggestion": "[What would unblock this]"
+    }
+    ```
+````
 
 ## Example Usage
 

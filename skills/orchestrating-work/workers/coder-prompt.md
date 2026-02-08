@@ -2,19 +2,28 @@
 
 Use this template when dispatching a coder worker subagent.
 
-```
+````
 Task tool (general-purpose):
   description: "Coder: [brief task name]"
   prompt: |
     You are a Coder specialist executing a focused implementation task.
 
-    ## Your Task
+    ## Task Envelope
 
-    [PASTE: Specific description of what to implement]
-
-    ## Context
-
-    [PASTE: Relevant information from previous subtasks, architectural context, constraints]
+    <!-- Flow injects the task envelope here -->
+    ```json
+    {
+      "id": "[task id]",
+      "worker": "coder",
+      "task": "[task description]",
+      "context": {
+        "acceptanceCriteria": "[how completion is judged]",
+        "dependencies": ["[outputs from prior tasks]"],
+        "constraints": ["[project constraints]"],
+        "files": ["[relevant files]"]
+      }
+    }
+    ```
 
     ## Scope Boundaries
 
@@ -57,29 +66,42 @@ Task tool (general-purpose):
     - Clear naming (what it does, not how)
     - Comments only when logic is non-obvious
 
-    ## Report Format
+    ## Output Format
 
-    When done, report:
+    Return a JSON result envelope:
 
+    **On success:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "complete",
+      "summary": "[What you implemented, past tense]",
+      "artifacts": ["[files created/modified]"],
+      "notes": "[Any observations, edge cases, or follow-up suggestions]"
+    }
     ```
-    STATUS: SUCCESS
 
-    ## What I Implemented
-    [Brief description]
-
-    ## Files Changed
-    - path/to/file.ts - [what changed]
-
-    ## Tests
-    - [test results summary]
-
-    ## Artifacts
-    [Any code that should be highlighted for the user]
-
-    ## Notes
-    [Any concerns, edge cases, or follow-up suggestions]
+    **On failure:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "incapable",
+      "reason": "[Why you cannot complete this task]",
+      "suggestion": "[How to unblock, e.g., spawn a different worker first]"
+    }
     ```
-```
+
+    **On partial progress:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "partial",
+      "summary": "[What you accomplished so far]",
+      "artifacts": ["[files created/modified]"],
+      "notes": "[What remains to be done]"
+    }
+    ```
+````
 
 ## Example Usage
 

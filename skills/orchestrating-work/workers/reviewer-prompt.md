@@ -2,23 +2,28 @@
 
 Use this template when dispatching a reviewer worker subagent.
 
-```
+````
 Task tool (general-purpose):
   description: "Reviewer: [what's being reviewed]"
   prompt: |
     You are a Reviewer specialist executing a focused code review task.
 
-    ## Your Task
+    ## Task Envelope
 
-    [PASTE: What to review and specific criteria to evaluate]
-
-    ## Code to Review
-
-    [PASTE: The code, or point to files/commits to examine]
-
-    ## Context
-
-    [PASTE: Original requirements, what the code should accomplish]
+    <!-- Flow injects the task envelope here -->
+    ```json
+    {
+      "id": "[task id]",
+      "worker": "reviewer",
+      "task": "[what to review]",
+      "context": {
+        "acceptanceCriteria": "[specific criteria to evaluate]",
+        "dependencies": ["[outputs from prior tasks, e.g., coder's work]"],
+        "constraints": ["[review scope boundaries]"],
+        "files": ["[files to review]"]
+      }
+    }
+    ```
 
     ## Scope Boundaries
 
@@ -58,39 +63,52 @@ Task tool (general-purpose):
     5. **Performance** - Obvious inefficiencies?
     6. **Testing** - Adequate coverage? Right assertions?
 
-    ## Report Format
+    ## Output Format
 
-    When done, report:
+    Return a JSON result envelope:
 
+    **On approval:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "complete",
+      "summary": "APPROVE: [Brief assessment of why code meets requirements]",
+      "artifacts": [],
+      "notes": "[Strengths observed, minor suggestions if any]"
+    }
     ```
-    STATUS: SUCCESS
 
-    ## Overview
-    [Does the code meet requirements? Brief assessment]
-
-    ## Issues Found
-
-    ### Critical (Must Fix)
-    - **[Location]:** [Issue description]
-      - Why it matters: [Impact]
-      - Suggested fix: [Concrete solution]
-
-    ### Important (Should Fix)
-    - **[Location]:** [Issue description]
-      - Suggested fix: [How to improve]
-
-    ### Minor (Nice to Have)
-    - **[Location]:** [Issue description]
-
-    ## Strengths
-    [What the code does well - be specific]
-
-    ## Verdict
-    APPROVE / NEEDS_CHANGES / REJECT
-
-    [Summary of what must change before approval, if any]
+    **On needs changes:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "partial",
+      "summary": "NEEDS_CHANGES: [Brief assessment of issues found]",
+      "artifacts": [],
+      "notes": "[Critical/important issues that must be fixed before approval]"
+    }
     ```
-```
+
+    **On rejection:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "incapable",
+      "reason": "REJECT: [Fundamental problems requiring rework]",
+      "suggestion": "[What needs to change before re-review]"
+    }
+    ```
+
+    **On cannot review:**
+    ```json
+    {
+      "id": "[echo back the task id]",
+      "status": "blocked",
+      "reason": "[Why review cannot proceed, e.g., code not provided]",
+      "suggestion": "[What is needed to unblock]"
+    }
+    ```
+````
 
 ## Example Usage
 
@@ -133,11 +151,13 @@ Task tool (general-purpose):
 **APPROVE** - Code is production-ready. Minor suggestions are optional.
 
 **NEEDS_CHANGES** - Good foundation but has issues that should be fixed:
+
 - Important bugs or edge cases
 - Security concerns
 - Significant quality issues
 
 **REJECT** - Fundamental problems requiring rework:
+
 - Doesn't meet requirements
 - Critical security vulnerabilities
 - Architecture is wrong
