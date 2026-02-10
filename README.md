@@ -196,6 +196,10 @@ Works well with:
 - `superpowers:test-driven-development` - Workers follow TDD
 - `superpowers:dispatching-parallel-agents` - Independent subtasks
 
+## Related
+
+- [duet](https://github.com/tslateman/duet) — Git workflows, reflection, code quality commands
+
 ## License
 
 MIT

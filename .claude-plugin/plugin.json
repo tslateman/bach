@@ -3,7 +3,7 @@
   "description": "Two-tier agent orchestration: Manager decomposes and delegates, Workers execute focused subtasks",
   "version": "0.1.0",
   "author": {
-    "name": "Your Name"
+    "name": "tslateman"
   },
   "homepage": "https://github.com/tslateman/bach",
   "license": "MIT",
