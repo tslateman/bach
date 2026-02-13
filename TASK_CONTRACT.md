@@ -138,3 +138,12 @@ Return a JSON result envelope:
 | Its specialty           | Project state                 |
 | How to signal incapable | Flow's DAG structure          |
 | Output format           | What happens after it returns |
+
+## Schema Files
+
+Machine-readable JSON Schema for both envelopes:
+
+- Task envelope: `../flow/schemas/task-envelope.json`
+- Result envelope: `../flow/schemas/result-envelope.json`
+
+The schemas are the validation source of truth. Examples above are for human readability.
