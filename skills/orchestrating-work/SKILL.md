@@ -26,12 +26,14 @@ digraph when_to_use {
 ```
 
 **Use when:**
+
 - Task has 3+ distinct subtasks
 - Different skills needed (research, code, review)
 - Subtasks can be defined independently
 - Quality benefits from focused attention
 
 **Don't use when:**
+
 - Task is straightforward
 - Heavy interdependencies between parts
 - Exploratory work (don't know scope yet)
@@ -62,6 +64,7 @@ Task tool (general-purpose):
 ```
 
 **Worker prompt templates:**
+
 - `./workers/coder-prompt.md` - Implementation tasks
 - `./workers/researcher-prompt.md` - Investigation tasks
 - `./workers/reviewer-prompt.md` - Quality review tasks
@@ -127,18 +130,21 @@ Reviewer returns: Review with findings
 ## Key Principles
 
 ### Manager Responsibilities
+
 - **Never do the work** - Only plan, delegate, verify
 - **Provide context** - Workers get what they need upfront
 - **Define scope clearly** - Workers know exactly what to do
 - **Verify completion** - Check against Definition of Done
 
 ### Worker Characteristics
+
 - **Stateless** - Only know their subtask, not full request
 - **Focused** - One clear goal, one specialty
 - **Honest** - Report INCAPABLE if task doesn't fit
 - **Structured output** - Return results in expected format
 
 ### Communication
+
 - Manager provides full context to workers
 - Workers don't read the original request
 - Workers return structured results
@@ -155,11 +161,14 @@ Reviewer returns: Review with findings
 ## Integration with Other Skills
 
 **Works well with:**
+
+- **bach:lifecycle** - For multi-phase projects with review gates. Lifecycle wraps this skill — each phase executes using the two-tier pattern here, with gates between phases.
 - **superpowers:writing-plans** - For larger initiatives, write plan first
 - **superpowers:test-driven-development** - Coder workers should follow TDD
 - **superpowers:dispatching-parallel-agents** - When subtasks are independent
 
 **Sequence:**
-1. Use `writing-plans` if task is large/complex
-2. Use `orchestrating-work` to execute each plan section
+
+1. Use `lifecycle` if task spans multiple phases with gates
+2. Use `orchestrating-work` for single-pass decomposition
 3. Workers use `test-driven-development` for code tasks

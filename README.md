@@ -33,15 +33,25 @@ User Request
 bach/
 ├── .claude-plugin/
 │   └── plugin.json                  # Plugin metadata
+├── agents/
+│   └── architect.md                 # CC agent: design authority
 ├── commands/
-│   └── orchestrate.md               # /orchestrate slash command
+│   ├── orchestrate.md               # /orchestrate — single-pass decomposition
+│   └── mission.md                   # /mission — multi-phase lifecycle
 ├── skills/
 │   ├── orchestrating-work/
 │   │   ├── SKILL.md                 # Core two-tier orchestration pattern
 │   │   └── workers/
+│   │       ├── architect-prompt.md  # Design and phase planning template
 │   │       ├── coder-prompt.md      # Implementation task template
 │   │       ├── researcher-prompt.md # Investigation task template
-│   │       └── reviewer-prompt.md   # Code review task template
+│   │       ├── reviewer-prompt.md   # Code review task template
+│   │       └── tester-prompt.md     # Test writing task template
+│   ├── lifecycle/
+│   │   ├── SKILL.md                 # Multi-phase orchestration with gates
+│   │   └── reference/
+│   │       ├── phase-gates.md       # Gate pattern reference
+│   │       └── dependency-waves.md  # Wave algorithm reference
 │   └── creating-workers/
 │       └── SKILL.md                 # Guide to adding custom workers
 ├── README.md
@@ -63,114 +73,86 @@ git clone https://github.com/tslateman/bach .claude-plugins/bach
 
 ## Quick Start
 
-Here's a hypothetical example showing the orchestration flow:
+### Single-Pass: `/orchestrate`
+
+For tasks that decompose into a few subtasks without phase boundaries:
 
 ```
 /orchestrate Add input validation to the user registration form
 ```
 
-The Manager analyzes this and creates an execution plan:
+The Manager analyzes, decomposes, dispatches workers, and synthesizes results in one pass.
+
+### Multi-Phase: `/mission`
+
+For projects that span multiple phases with review gates:
 
 ```
-## Execution Plan
-
-### Objective
-Add robust input validation to user registration
-
-### Subtasks
-1. Research validation patterns (researcher)
-   - Compare client-side vs server-side approaches
-   - Recommend validation library
-
-2. Implement validation (coder)
-   - Add form validation rules
-   - Display error messages
-   - Write unit tests
-
-3. Review implementation (reviewer)
-   - Check for edge cases
-   - Verify security (XSS, injection)
-   - Approve or request changes
+/mission Build a CLI tool with auth, config management, and plugin system
 ```
 
-Each worker reports back with structured results. The Manager synthesizes findings and reports the final outcome.
+The Manager dispatches an architect to plan phases, creates tasks with phase prefixes and gate barriers, executes each phase via the two-tier pattern, and gates transitions with reviewer approval.
 
 ## Usage
 
-### Command: `/orchestrate`
+### Commands
 
-Break down a complex task using the two-tier pattern:
-
-```
-/orchestrate Create a REST API with JWT authentication and rate limiting
-```
-
-The Manager will:
-
-1. Identify objectives
-2. Create an execution plan with subtasks
-3. Dispatch workers (researcher → coder → reviewer)
-4. Synthesize and report results
+| Command        | Pattern     | Use When                                    |
+| -------------- | ----------- | ------------------------------------------- |
+| `/orchestrate` | Single-pass | 3+ subtasks, no phase boundaries            |
+| `/mission`     | Multi-phase | Distinct phases, dependencies, review gates |
 
 ### Skills
 
-**`bach:orchestrating-work`** - Core skill teaching the orchestration pattern
+**`bach:orchestrating-work`** — Core skill teaching the two-tier delegation pattern
 
-**`bach:creating-workers`** - How to create custom specialist workers
+**`bach:lifecycle`** — Multi-phase orchestration with architect planning and review gates
+
+**`bach:creating-workers`** — How to create custom specialist workers
 
 ### Worker Prompt Templates
 
+- `bach:orchestrating-work/workers/architect-prompt.md`
 - `bach:orchestrating-work/workers/coder-prompt.md`
 - `bach:orchestrating-work/workers/researcher-prompt.md`
 - `bach:orchestrating-work/workers/reviewer-prompt.md`
+- `bach:orchestrating-work/workers/tester-prompt.md`
 
 ## When to Use
 
-**Good fit:**
+**Good fit for `/orchestrate`:**
 
 - Complex tasks with 3+ distinct parts
 - Tasks needing different skills (research, code, review)
 - Quality benefits from focused attention
 - You want structured delegation
 
+**Good fit for `/mission`:**
+
+- Multi-phase projects (design → build → integrate)
+- Phase dependencies (phase 2 needs phase 1's output)
+- Quality gates between phases matter
+- Architect planning adds value
+
 **Not a good fit:**
 
 - Simple tasks (just do them)
-- Highly interdependent work
-- Exploratory investigation (don't know scope yet)
 - One-line fixes
+- Exploratory investigation (don't know scope yet)
 
 ## Core Workers
 
-| Worker       | Specialty                                                     |
-| ------------ | ------------------------------------------------------------- |
-| `researcher` | Investigate options, analyze trade-offs, recommend approaches |
-| `coder`      | Implement features, write tests, fix bugs                     |
-| `reviewer`   | Evaluate quality, find issues, approve/reject                 |
+| Worker       | Specialty                                                        |
+| ------------ | ---------------------------------------------------------------- |
+| `architect`  | Plan phases, design systems, define interfaces, resolve disputes |
+| `researcher` | Investigate options, analyze trade-offs, recommend approaches    |
+| `coder`      | Implement features, write tests, fix bugs                        |
+| `reviewer`   | Evaluate quality, find issues, approve/reject, gate reviews      |
+| `tester`     | Write tests, find edge cases, verify behavior                    |
 
 ## Creating Custom Workers
 
-See `bach:creating-workers` for the full guide. Quick example:
-
-```markdown
-# Tester Worker Prompt Template
-
-Task tool (general-purpose):
-description: "Tester: [what to test]"
-prompt: |
-You are a Tester specialist...
-
-    ## Your Task
-    [PASTE: What to test]
-
-    ## Scope Boundaries
-    **You handle:** Writing tests, finding edge cases
-    **You do NOT handle:** Fixing bugs, writing implementation
-
-    [... rest of template]
-```
-
-Save to `bach/skills/orchestrating-work/workers/tester-prompt.md`.
+See `bach:creating-workers` for the full guide. Save worker templates to `bach/skills/orchestrating-work/workers/[role]-prompt.md`.
 
 ## Philosophy
 
@@ -192,9 +174,9 @@ Save to `bach/skills/orchestrating-work/workers/tester-prompt.md`.
 
 Works well with:
 
-- `superpowers:writing-plans` - For larger initiatives
-- `superpowers:test-driven-development` - Workers follow TDD
-- `superpowers:dispatching-parallel-agents` - Independent subtasks
+- `superpowers:writing-plans` — For larger initiatives
+- `superpowers:test-driven-development` — Workers follow TDD
+- `superpowers:dispatching-parallel-agents` — Independent subtasks
 
 ## Related
 

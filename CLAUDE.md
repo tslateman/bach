@@ -10,11 +10,14 @@ markdownlint commands/**/*.md skills/**/*.md
 
 ## Architecture
 
-A Manager decomposes tasks and delegates to specialist Workers (researcher, coder, reviewer). Workers are stateless prompt templates.
+A Manager decomposes tasks and delegates to specialist Workers (researcher, coder, reviewer, architect). Workers are stateless prompt templates.
 
-- `commands/orchestrate.md` — `/orchestrate` slash command
+- `commands/orchestrate.md` — `/orchestrate` slash command (single-pass)
+- `commands/mission.md` — `/mission` slash command (multi-phase lifecycle)
 - `skills/orchestrating-work/` — Core two-tier pattern + worker templates
+- `skills/lifecycle/` — Multi-phase orchestration with review gates
 - `skills/creating-workers/` — Guide for adding custom workers
+- `agents/architect.md` — CC agent: design authority for planning phases
 
 ## Contracts
 
